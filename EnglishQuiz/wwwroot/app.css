@@ -57,3 +57,22 @@ h1:focus {
         right: 0.75rem;
         top: 0.5rem;
     }
+/*Start*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #EEEEEE;
+    color: #111111;
+}
