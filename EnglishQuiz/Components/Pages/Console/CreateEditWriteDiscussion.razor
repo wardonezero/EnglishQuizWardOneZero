@@ -1,0 +1,56 @@
+﻿@page "/console/write-discussion/{Id:int}"
+@page "/console/write-discussion/create"
+
+@if (model != null)
+{
+    <div class="console-actions">
+        <div>
+            @(IsEdit ? "Edit" : "Create") Write a discussion 
+        </div>
+        <div>
+            <button type="button" class="button-first" @onclick="() => SaveAsync()">Save</button>
+            <button type="button" class="button-second" @onclick="() => SaveAsync(true)">Save and Continue</button>
+        </div>
+    </div>
+
+    <div class="console-form">
+        <div class="form-box">
+            <div>
+                <label>Name</label>
+                <input type="text" placeholder="Name" @bind="model.Name" />
+            </div>
+
+            <div>
+                <label>Difficulty</label>
+                <select @bind="model.Difficulty">
+                    <option value="@Difficulties.Easy">Easy</option>
+                    <option value="@Difficulties.Medium">Medium</option>
+                    <option value="@Difficulties.Hard">Hard</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Display Order</label>
+                <input type="number" @bind="model.DisplayOrder" />
+            </div>
+
+            <div>
+                <label>Published</label>
+                <label class="checkbox-label">
+                    <input type="checkbox" @bind="model.Published" />
+                </label>
+            </div>
+        </div>
+
+        <div class="form-box">
+            <div>
+                <label>Professor</label>
+                <textarea @bind="model.Professor" />
+            </div>
+            <div>
+                <label>Student</label>
+                <textarea @bind="model.Student" />
+            </div>
+        </div>
+    </div>
+}

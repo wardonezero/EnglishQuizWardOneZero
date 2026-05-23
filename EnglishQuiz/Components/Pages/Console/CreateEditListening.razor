@@ -1,0 +1,89 @@
+﻿@page "/console/listening/{Id:int}"
+@page "/console/listening/create"
+
+@if (model != null)
+{
+    <div class="console-actions">
+        <div>
+            @(IsEdit ? "Edit" : "Create") Listening
+        </div>
+        <div>
+            <button type="button" class="button-first" @onclick="() => SaveAsync()">Save</button>
+            <button type="button" class="button-second" @onclick="() => SaveAsync(true)">Save and Continue</button>
+        </div>
+    </div>
+
+    <div class="console-form">
+        <div class="form-box">
+            <div>
+                <label>Name</label>
+                <input type="text" placeholder="Name" @bind="model.Name" />
+            </div>
+
+            <div>
+                <label>Difficulty</label>
+                <select @bind="model.Difficulty">
+                    <option value="@Difficulties.Easy">Easy</option>
+                    <option value="@Difficulties.Medium">Medium</option>
+                    <option value="@Difficulties.Hard">Hard</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Display Order</label>
+                <input type="number" @bind="model.DisplayOrder" />
+            </div>
+
+            <div>
+                <label>Published</label>
+                <label class="checkbox-label">
+                    <input type="checkbox" @bind="model.Published" />
+                </label>
+            </div>
+        </div>
+
+        <div class="form-box">
+            <div>
+                <label>Image</label>
+                <div class="media-selector">
+                    @if (!string.IsNullOrWhiteSpace(model.ImageUrl))
+                    {
+                        <img src="@model.ImageUrl" alt="Preview" />
+                        <button type="button" class="btn-remove" @onclick="@(() => model.ImageUrl = null)">Remove</button>
+                    }
+                    <button type="button" class="btn-select" @onclick="@(() => showImagePicker = !showImagePicker)">
+                        @(showImagePicker ? "Close Picker" : "Select Image")
+                    </button>
+                    @if (showImagePicker)
+                    {
+                        <FilePicker OnFileSelected="OnImageSelected" />
+                    }
+                </div>
+            </div>
+
+            <div>
+                <label>Text</label>
+                <input type="text" placeholde="Text" @bind="model.Text" />
+            </div>
+
+            <div>
+                <audio controls src=""></audio>
+            </div>
+        </div>
+        @if (IsEdit)
+        {
+            <div class="form-box">
+                <h3>Single Choice Questions</h3>
+                @if (model.SinglChoiceQuestionsIds.Any(id => id == 0))
+                {
+                    <label>Add New Question</label>
+                    <CreateEditSingleChoiceQuestion OnSaved="OnSinglChoiceQuestionSaved" />
+                }
+                @foreach (int questionId in model.SinglChoiceQuestionsIds.Where(id => id > 0))
+                {
+                    <CreateEditSingleChoiceQuestion Id="questionId" OnSaved="OnSinglChoiceQuestionSaved" OnCancel="@(() => RemoveQuestion(questionId))" />
+                }
+            </div>
+        }
+    </div>
+}

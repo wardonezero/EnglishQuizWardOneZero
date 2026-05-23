@@ -1,0 +1,33 @@
+@if (model != null && answer != null)
+{
+    <div class="console-form">
+        <div class="form-box">
+            <div>
+                <label>Question</label>
+                <input type="text" placeholder="Question" @bind="model.Question" />
+            </div>
+
+            <div>
+                <label>Correct Answer</label>
+                <input type="text" placeholder="Answer" @bind="answer.Answer" />
+            </div>
+
+            <div>
+                <label>Incorrect Answers</label>
+                @for (int i = 0; i < 2; i++)
+                {
+                    int index = i;
+                    <input type="text" placeholder="Incorrect Answer" @bind="model.Answers[index]" />
+                }
+            </div>
+            
+            <div>
+                <button type="button" class="button-first" @onclick="SaveAsync">Save</button>
+                @if (IsEdit || OnCancel.HasDelegate)
+                {
+                    <button type="button" class="button-remove" @onclick="@(() => OnCancel.InvokeAsync())">Cancel</button>
+                }
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,73 @@
+<div class="file-picker-container" @onkeydown="HandleKeyDown" tabindex="0">
+    <div class="file-actions">
+        <div class="dropdown">
+            <button class="btn-dropdown">Actions <i class="fas fa-caret-down"></i></button>
+            <div class="dropdown-content">
+                <label class="dropdown-item">
+                    Upload Files
+                    <InputFile OnChange="OnUploadFiles" Multiple style="display:none" />
+                </label>
+                <label class="dropdown-item">
+                    Upload Folder
+                    <InputFile OnChange="OnUploadFolder" Multiple webkitdirectory directory style="display:none" />
+                </label>
+                <button class="dropdown-item" @onclick="ShowCreateFolderModal">Create Folder</button>
+                <button class="dropdown-item text-danger" @onclick="DeleteSelected" disabled="@(!HasSelection)">Delete Selected</button>
+            </div>
+        </div>
+        
+        <div class="breadcrumb">
+            <span @onclick="@(() => NavigateTo(""))">Root</span>
+            @foreach (var segment in PathSegments)
+            {
+                <span> / </span>
+                <span @onclick="@(() => NavigateTo(segment.Path))">@segment.Name</span>
+            }
+        </div>
+    </div>
+
+    <div class="file-explorer">
+        <div class="file-grid">
+            @if (CurrentSubPath != "")
+            {
+                <div class="file-item folder" @onclick="NavigateUp">
+                    <div class="icon"><i class="fas fa-level-up-alt"></i></div>
+                    <div class="name">..</div>
+                </div>
+            }
+
+            @foreach (var item in Items)
+            {
+                <div class="file-item @(item.IsFolder ? "folder" : "file") @(IsSelected(item) ? "selected" : "")"
+                     @onclick="@(e => HandleItemClick(item, e))"
+                     @ondblclick="@(() => HandleDoubleClick(item))">
+                    <div class="icon">
+                        @if (item.IsFolder)
+                        {
+                            <i class="fas fa-folder"></i>
+                        }
+                        else
+                        {
+                            <i class="@GetFileIcon(item.Name)"></i>
+                        }
+                    </div>
+                    <div class="name">@item.Name</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (isCreateFolderVisible)
+    {
+        <div class="modal-backdrop">
+            <div class="modal-content">
+                <h3>Create Folder</h3>
+                <input type="text" @bind="newFolderName" placeholder="Folder Name" @onkeyup="@(e => { if(e.Key == "Enter") CreateFolder(); })" />
+                <div class="modal-actions">
+                    <button @onclick="CreateFolder">Create</button>
+                    <button @onclick="@(() => isCreateFolderVisible = false)">Cancel</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,36 @@
+﻿@page "/console/{ListName}"
+
+<div class="actions">
+    <button type="button" @onclick="CreateNewAsync">Create New</button>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Checkbox</th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Display Order</th>
+            <th>Published</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (model != null)
+        {
+            @foreach (var item in model)
+            {
+                <tr>
+                    <td></td>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.DisplayOrder</td>
+                    <td>@item.Published</td>
+                    <td>
+                        <button type="button" @onclick="() => EditAsync(item.Id)">Edit</button>
+                        <button type="button">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

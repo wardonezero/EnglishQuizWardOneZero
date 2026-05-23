@@ -9,3 +9,20 @@
 @using EnglishQuiz
 @using EnglishQuiz.Components
 @using EnglishQuiz.Components.Layout
+@* Start *@
+@using EnglishQuiz.Data
+@using EnglishQuiz.Models
+@using EnglishQuiz.Models.Enums
+@using EnglishQuiz.Models.Interfaces
+@using EnglishQuiz.Services
+@using EnglishQuiz.Components.Pages
+@* @using EnglishQuiz.Components.Pages.Quiz *@
+@using EnglishQuiz.Components.Pages.Main
+@using EnglishQuiz.Components.Pages.Console
+@using EnglishQuiz.Components.Modules.Console
+
+@inject NavigationManager navigation
+@inject GenericService<DataContext> service
+@inject FileManagerService fileManager
+@inject AudioService audio
+@inject QuizService quiz

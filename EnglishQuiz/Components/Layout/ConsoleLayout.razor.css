@@ -1,1 +1,24 @@
-﻿
+﻿.main-console {
+    aspect-ratio: 16/9;
+    min-width: 640px;
+    min-height: 360px;
+    width: 100vw;
+    height: auto;
+    max-width: 1920px;
+    max-height: 1080px;
+    display: flex;
+}
+
+.console-explorer {
+    width: 15%;
+    height: 100%;
+    border-right: 2px solid;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.console-body {
+    width: 85%;
+    height: 100%;
+}

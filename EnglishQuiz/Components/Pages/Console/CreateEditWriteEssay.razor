@@ -1,0 +1,72 @@
+﻿@page "/console/write-essay/{Id:int}"
+@page "/console/write-essay/create"
+
+@if (model != null)
+{
+    <div class="console-actions">
+        <div>
+            @(IsEdit ? "Edit" : "Create") Write an Essay
+        </div>
+        <div>
+            <button type="button" class="button-first" @onclick="() => SaveAsync()">Save</button>
+            <button type="button" class="button-second" @onclick="() => SaveAsync(true)">Save and Continue</button>
+        </div>
+    </div>
+
+    <div class="console-form">
+        <div class="form-box">
+            <div>
+                <label>Name</label>
+                <input type="text" placeholder="Name" @bind="model.Name" />
+            </div>
+
+            <div>
+                <label>Difficulty</label>
+                <select @bind="model.Difficulty">
+                    <option value="@Difficulties.Easy">Easy</option>
+                    <option value="@Difficulties.Medium">Medium</option>
+                    <option value="@Difficulties.Hard">Hard</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Display Order</label>
+                <input type="number" @bind="model.DisplayOrder" />
+            </div>
+
+            <div>
+                <label>Published</label>
+                <label class="checkbox-label">
+                    <input type="checkbox" @bind="model.Published" />
+                </label>
+            </div>
+        </div>
+
+        <div class="form-box">
+            <div>
+                <label>Situation</label>
+                <textarea @bind="model.Situation" />
+            </div>
+            <div>
+                <label>Main Instruction</label>
+                <input type="text" placeholder="Instruction" @bind="model.Instruction" />
+            </div>
+            <div>
+                <label>Instructions</label>
+                @for (byte i = 0; i < 2; i++)
+                {
+                    byte index = i;
+                    <input type="text" placeholder="Instruction" @bind="model.Instructions[index]" />
+                }
+            </div>
+            <div>
+                <label>To</label>
+                <input type="text" @bind="model.To" />
+            </div>
+            <div>
+                <label>Subject</label>
+                <input type="text" @bind="model.Subject" />
+            </div>
+        </div>
+    </div>
+}
