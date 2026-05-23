@@ -1,5 +1,5 @@
 ﻿namespace EnglishQuiz.Services;
 
-public class QuizService
+public sealed class QuizService
 {
 }

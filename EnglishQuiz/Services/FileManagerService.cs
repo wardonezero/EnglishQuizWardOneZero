@@ -24,17 +24,11 @@ public sealed class FileManagerService(IWebHostEnvironment env)
         List<FileItem> items = [];
 
         foreach (string dir in Directory.GetDirectories(targetPath))
-        {
             items.Add(CreateFileItem(dir, true));
-        }
 
         foreach (string file in Directory.GetFiles(targetPath))
-        {
             if (AllowedExtensions.Contains(Path.GetExtension(file)))
-            {
                 items.Add(CreateFileItem(file, false));
-            }
-        }
 
         return await Task.FromResult(items);
     }
@@ -53,9 +47,7 @@ public sealed class FileManagerService(IWebHostEnvironment env)
         string newFullPath = Path.Combine(directory, newName);
 
         if (File.Exists(oldFullPath))
-        {
             File.Move(oldFullPath, newFullPath);
-        }
 
         return Task.CompletedTask;
     }
@@ -67,28 +59,22 @@ public sealed class FileManagerService(IWebHostEnvironment env)
         if (!Directory.Exists(targetDir))
             Directory.CreateDirectory(targetDir);
 
-        foreach (var file in files)
+        foreach (IBrowserFile file in files)
         {
             if (!AllowedExtensions.Contains(Path.GetExtension(file.Name)))
                 continue;
 
             string filePath = Path.Combine(targetDir, file.Name);
-            using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024 * 50); // 50MB limit
-            using var fileStream = new FileStream(filePath, FileMode.Create);
+            using Stream stream = file.OpenReadStream(maxAllowedSize: oneGB * 10);
+            using FileStream fileStream = new(filePath, FileMode.Create);
             await stream.CopyToAsync(fileStream);
         }
     }
 
     public async Task UploadFolderAsync(string subPath, IReadOnlyList<IBrowserFile> files)
     {
-        // IBrowserFile for folder upload provides the relative path in the 'Name' or we might need to parse it if provided as a flat list with paths.
-        // Blazor's <InputFile> with 'webkitdirectory' provides files with relative paths.
-        foreach (var file in files)
+        foreach (IBrowserFile file in files)
         {
-            // Note: In Blazor, file.Name usually contains the relative path if webkitdirectory is used, 
-            // but sometimes it's just the name and we need to handle the structure.
-            // If the browser provides relative paths, we need to ensure the subdirectories are created.
-
             if (!AllowedExtensions.Contains(Path.GetExtension(file.Name)))
                 continue;
 
@@ -98,12 +84,11 @@ public sealed class FileManagerService(IWebHostEnvironment env)
             if (!string.IsNullOrEmpty(targetFileDir) && !Directory.Exists(targetFileDir))
                 Directory.CreateDirectory(targetFileDir);
 
-            using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024 * 50);
-            using var fileStream = new FileStream(targetFilePath, FileMode.Create);
+            using Stream stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024 * 50);
+            using FileStream fileStream = new(targetFilePath, FileMode.Create);
             await stream.CopyToAsync(fileStream);
         }
     }
-
 
     public Task DeleteFilesAsync(IEnumerable<string> paths)
     {
@@ -111,9 +96,7 @@ public sealed class FileManagerService(IWebHostEnvironment env)
         {
             string fullPath = ResolvePath(path);
             if (File.Exists(fullPath))
-            {
                 File.Delete(fullPath);
-            }
         }
         return Task.CompletedTask;
     }
@@ -125,9 +108,7 @@ public sealed class FileManagerService(IWebHostEnvironment env)
         string newFullPath = Path.Combine(parentDir, newName);
 
         if (Directory.Exists(oldFullPath))
-        {
             Directory.Move(oldFullPath, newFullPath);
-        }
 
         return Task.CompletedTask;
     }
@@ -137,9 +118,7 @@ public sealed class FileManagerService(IWebHostEnvironment env)
         string targetDir = ResolvePath(Path.Combine(subPath ?? string.Empty, folderName));
 
         if (!Directory.Exists(targetDir))
-        {
             Directory.CreateDirectory(targetDir);
-        }
 
         return Task.CompletedTask;
     }
@@ -152,17 +131,12 @@ public sealed class FileManagerService(IWebHostEnvironment env)
             throw new UnauthorizedAccessException("Cannot delete the Data root directory.");
 
         if (Directory.Exists(fullPath))
-        {
             Directory.Delete(fullPath, true);
-        }
 
         return Task.CompletedTask;
     }
 
-    private bool IsFileAllowed(string path)
-    {
-        return AllowedExtensions.Contains(Path.GetExtension(path));
-    }
+    private bool IsFileAllowed(string path) => AllowedExtensions.Contains(Path.GetExtension(path));
 
     private string ResolvePath(string? subPath)
     {
