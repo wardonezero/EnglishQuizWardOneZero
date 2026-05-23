@@ -3,7 +3,7 @@ using EnglishQuiz.Models.Interfaces;
 
 namespace EnglishQuiz.Models;
 
-public class BaseQuiz : IQuizListItem
+public abstract class BaseQuiz : IQuizListItem
 {
     public int Id { get; set; } = 0;
     public string Name { get; set; } = string.Empty;

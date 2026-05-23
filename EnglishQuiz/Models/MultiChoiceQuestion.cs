@@ -1,12 +1,18 @@
 ﻿namespace EnglishQuiz.Models;
 
-public class MultiChoiceQuestion : BaseQuiz
+public class MultiChoiceQuestion
 {
-    public List<string> Answers { get; set; } = new(4);
+    public int Id { get; set; }
+
+    public string Question { get; set; } = string.Empty;
+
+    public string[] Answers { get; set; } = [string.Empty, string.Empty, string.Empty, string.Empty,];
+
 }
 
 public class MultiChoiceQuestionAnswer
 {
     public int Id { get; set; } = 0;
-    public List<string> Answers { get; set; } = new(4);
+    public string[] Answers { get; set; } = [string.Empty, string.Empty, string.Empty, string.Empty,];
+
 }

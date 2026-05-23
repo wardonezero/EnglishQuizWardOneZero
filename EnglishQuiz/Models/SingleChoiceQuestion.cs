@@ -1,8 +1,10 @@
 ﻿namespace EnglishQuiz.Models;
 
-public class SingleChoiceQuestion : BaseQuiz
+public class SingleChoiceQuestion
 {
-    public List<string> Answers { get; set; } = new(4);
+    public int Id { get; set; }
+    public string Question { get; set; } = string.Empty;
+    public string[] Answers { get; set; } = [string.Empty, string.Empty, string.Empty, string.Empty,];
 }
 
 public class SingleChoiceQuestionAnswer
