@@ -10,7 +10,11 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     public DbSet<User> Users { get; set; }
 
     public DbSet<SingleChoiceQuestion> SingleChoiceQuestions { get; set; }
+    public DbSet<SingleChoiceQuestionAnswer> SingleChoiceQuestionAnswer { get; set; }
+    public DbSet<SingleChoiceQuestionStudentAnswer> SingleChoiceQuestionStudentAnswer { get; set; }
+
     public DbSet<MultiChoiceQuestion> MultiChoiceQuestions { get; set; }
+    public DbSet<MultiChoiceQuestionAnswer> MultiChoiceQuestionAnswer { get; set; }
 
     public DbSet<Listening> Listenings { get; set; }
 
@@ -28,7 +32,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        Type[] answerModels = [typeof(SingleChoiceQuestionAnswer), typeof(MultiChoiceQuestionAnswer), typeof(BuildSentenceAnswer)];
+        Type[] answerModels = [typeof(SingleChoiceQuestionAnswer), typeof(SingleChoiceQuestionStudentAnswer), typeof(MultiChoiceQuestionAnswer), typeof(BuildSentenceAnswer)];
         foreach (Type? entityType in answerModels)
         {
             modelBuilder.Entity(entityType)
