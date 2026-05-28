@@ -1,5 +1,5 @@
-﻿@page "/console/listening/{Id:int}"
-@page "/console/listening/create"
+﻿@page "/console/listen-repeat/{Id:int}"
+@page "/console/listen-repeat/create"
 
 @if (model != null)
 {
@@ -57,47 +57,35 @@
         </div>
 
         <div class="form-box">
-            <div>
-                <label>Image</label>
-                <div class="media-selector">
-                    @if (!string.IsNullOrWhiteSpace(model.ImageUrl))
+            @for (byte i = 0; i < 7; i++)
+            {
+                byte index = i;
+                <div>
+                    <label>Image</label>
+                    <div class="media-selector">
+                        @if (!string.IsNullOrWhiteSpace(model.ImageUrls[index]))
+                        {
+                            <img src="@model.ImageUrls[index]" alt="Preview" />
+                            <button type="button" class="btn-remove" @onclick="@(() => model.ImageUrls[index] = string.Empty)">Remove</button>
+                        }
+                        <button type="button" class="btn-select" @onclick="@(() => showImagePickers[index] = !showImagePickers[index])">
+                            @(showImagePickers[index] ? "Close Picker" : "Select Image")
+                        </button>
+                        @if (showImagePickers[index])
+                        {
+                            <FilePicker OnFileSelected="path => OnImageSelected(index, path)" />
+                        }
+                    </div>
+                </div>
+                <div>
+                    <label>Sentence</label>
+                    <input type="text" placeholder="Sentence" @bind="model.Sentences[index]" />
+                    @if (!string.IsNullOrEmpty(model.AudioUrls[index]))
                     {
-                        <img src="@model.ImageUrl" alt="Preview" />
-                        <button type="button" class="btn-remove" @onclick="@(() => model.ImageUrl = string.Empty)">Remove</button>
-                    }
-                    <button type="button" class="btn-select" @onclick="@(() => showImagePicker = !showImagePicker)">
-                        @(showImagePicker ? "Close Picker" : "Select Image")
-                    </button>
-                    @if (showImagePicker)
-                    {
-                        <FilePicker OnFileSelected="OnImageSelected" />
+                        <audio controls src="@model.AudioUrls[index]"></audio>
                     }
                 </div>
-            </div>
-
-            <div>
-                <label>Text</label>
-                <input type="text" placeholde="Text" @bind="model.Text" />
-                @if (!string.IsNullOrEmpty(model.AudioUrl))
-                {
-                    <audio controls src="@model.AudioUrl"></audio>
-                }
-            </div>
+            }
         </div>
-        @if (IsEdit)
-        {
-            <div class="form-box">
-                <h3>Single Choice Questions</h3>
-                @if (model.SinglChoiceQuestionsIds.Any(id => id == 0))
-                {
-                    <label>Add New Question</label>
-                    <CreateEditSingleChoiceQuestion OnSaved="OnSinglChoiceQuestionSaved" />
-                }
-                @foreach (int questionId in model.SinglChoiceQuestionsIds.Where(id => id > 0))
-                {
-                    <CreateEditSingleChoiceQuestion Id="questionId" OnSaved="OnSinglChoiceQuestionSaved" OnCancel="@(() => RemoveQuestion(questionId))" />
-                }
-            </div>
-        }
     </div>
 }

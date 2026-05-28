@@ -9,10 +9,16 @@ public partial class CreateEditListening
     private bool IsEdit => Id > 0;
     private Listening? model;
     private bool showImagePicker;
+    private string? errorMessage;
+    private string[] availableVoices = [];
+    private string? selectedVoice;
+    private string originalText = string.Empty;
 
     protected override async Task OnParametersSetAsync()
     {
+        availableVoices = configuration.GetSection("SpeechConfiguration:Voices").Get<string[]>() ?? [];
         model = IsEdit ? await service.GetAsync<Listening>(Id) : new();
+        originalText = model?.Text ?? string.Empty;
     }
 
     private void OnImageSelected(string path)
@@ -61,10 +67,28 @@ public partial class CreateEditListening
     {
         if (model != null)
         {
-            if (model.Id > 0)
-                await service.EditAsync(model);
-            else
+            if (model.Id <= 0)
                 model.Id = await service.CreateAsync(model);
+            try
+            {
+                bool isNew;
+                bool isChanged;
+                if (!string.IsNullOrWhiteSpace(model.Text))
+                {
+                    isNew = string.IsNullOrEmpty(model.AudioUrl);
+                    isChanged = model.Text != originalText;
+                    if (isNew || isChanged)
+                    {
+                        model.AudioUrl = await audio.GenerateAudioAsync(model.Id, $"main", "speaking", "listen-repeat", model.Text, selectedVoice);
+                        originalText = model.Text;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
+            await service.EditAsync(model);
 
             if (saveContinue)
                 navigation.NavigateTo($"/console/listening/{model.Id}");

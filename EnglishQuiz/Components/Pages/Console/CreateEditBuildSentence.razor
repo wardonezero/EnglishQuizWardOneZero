@@ -1,7 +1,7 @@
-﻿@page "/console/write-essay/{Id:int}"
-@page "/console/write-essay/create"
+﻿@page "/console/build-sentence/{Id:int}"
+@page "/console/build-sentence/create"
 
-@if (model != null)
+@if (model != null && answer != null)
 {
     <div class="console-actions">
         <div>
@@ -44,28 +44,13 @@
 
         <div class="form-box">
             <div>
-                <label>Situation</label>
-                <textarea @bind="model.Situation" />
-            </div>
-            <div>
-                <label>Main Instruction</label>
-                <input type="text" placeholder="Instruction" @bind="model.Instruction" />
-            </div>
-            <div>
-                <label>Instructions</label>
-                @for (byte i = 0; i < 3; i++)
+                <label>Prompts and Answers</label>
+                @for (byte i = 0; i < 10; i++)
                 {
                     byte index = i;
-                    <input type="text" placeholder="Instruction" @bind="model.Instructions[index]" />
+                    <input type="text" placeholder="Prompt" @bind="model.Prompts[index]" />
+                    <input type="text" placeholder="Answer" @bind="answer.AnswerSentences[index]" />
                 }
-            </div>
-            <div>
-                <label>To</label>
-                <input type="text" @bind="model.To" />
-            </div>
-            <div>
-                <label>Subject</label>
-                <input type="text" @bind="model.Subject" />
             </div>
         </div>
     </div>

@@ -23,7 +23,7 @@ public partial class ItemList
         {
             "listening" => [.. (await service.GetPagedAsync<Listening>(page)).Cast<IListItem>()],
             "listen-repeat" => [.. (await service.GetPagedAsync<ListenRepeat>(page)).Cast<IListItem>()],
-            "conversations" => [.. (await service.GetPagedAsync<Conversation>(page)).Cast<IListItem>()],
+            "conversation" => [.. (await service.GetPagedAsync<Conversation>(page)).Cast<IListItem>()],
             "reading" => [.. (await service.GetPagedAsync<Reading>(page)).Cast<IListItem>()],
             "build-sentence" => [.. (await service.GetPagedAsync<BuildSentence>(page)).Cast<IListItem>()],
             "write-essay" => [.. (await service.GetPagedAsync<WriteEssay>(page)).Cast<IListItem>()],

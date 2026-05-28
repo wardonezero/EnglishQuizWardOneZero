@@ -1,5 +1,5 @@
-﻿@page "/console/listening/{Id:int}"
-@page "/console/listening/create"
+﻿@page "/console/conversation/{Id:int}"
+@page "/console/conversation/create"
 
 @if (model != null)
 {
@@ -74,30 +74,18 @@
                     }
                 </div>
             </div>
-
-            <div>
-                <label>Text</label>
-                <input type="text" placeholde="Text" @bind="model.Text" />
-                @if (!string.IsNullOrEmpty(model.AudioUrl))
-                {
-                    <audio controls src="@model.AudioUrl"></audio>
-                }
-            </div>
+            @for (byte i = 0; i < 4; i++)
+            {
+                byte index = i;
+                <div>
+                    <label>Sentence</label>
+                    <input type="text" placeholder="Sentence" @bind="model.Texts[index]" />
+                    @if (!string.IsNullOrEmpty(model.AudioUrls[index]))
+                    {
+                        <audio controls src="@model.AudioUrls[index]"></audio>
+                    }
+                </div>                
+            }
         </div>
-        @if (IsEdit)
-        {
-            <div class="form-box">
-                <h3>Single Choice Questions</h3>
-                @if (model.SinglChoiceQuestionsIds.Any(id => id == 0))
-                {
-                    <label>Add New Question</label>
-                    <CreateEditSingleChoiceQuestion OnSaved="OnSinglChoiceQuestionSaved" />
-                }
-                @foreach (int questionId in model.SinglChoiceQuestionsIds.Where(id => id > 0))
-                {
-                    <CreateEditSingleChoiceQuestion Id="questionId" OnSaved="OnSinglChoiceQuestionSaved" OnCancel="@(() => RemoveQuestion(questionId))" />
-                }
-            </div>
-        }
     </div>
 }
