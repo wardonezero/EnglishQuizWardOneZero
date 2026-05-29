@@ -28,7 +28,7 @@ public partial class ItemList
             "build-sentence" => [.. (await service.GetPagedAsync<BuildSentence>(page)).Cast<IListItem>()],
             "write-essay" => [.. (await service.GetPagedAsync<WriteEssay>(page)).Cast<IListItem>()],
             "write-discussion" => [.. (await service.GetPagedAsync<WriteDiscussion>(page)).Cast<IListItem>()],
-            "quizzes" => [.. (await service.GetPagedAsync<Quiz>(page)).Cast<IListItem>()],
+            "quizzes" => [.. (await service.GetPagedAsync<Models.Quiz>(page)).Cast<IListItem>()],
             _ => []
         };
     }
