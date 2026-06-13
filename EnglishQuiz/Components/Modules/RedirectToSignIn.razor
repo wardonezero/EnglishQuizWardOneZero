@@ -1,0 +1,3 @@
+﻿@code {
+    protected override void OnInitialized() => navigation.NavigateTo($"/account/sign-in?ReturnUrl={Uri.EscapeDataString(navigation.Uri)}", forceLoad: true);
+}

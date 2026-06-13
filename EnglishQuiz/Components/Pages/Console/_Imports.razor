@@ -1,4 +1,4 @@
 ﻿@layout ConsoleLayout
-
+@attribute [Authorize(Policy = "Moderator")]
 @inject IHostEnvironment environment
 @inject IConfiguration configuration
