@@ -1,4 +1,5 @@
 ﻿@page "/console/{ListName}"
+@rendermode InteractiveServer
 
 <div class="actions">
     <button type="button" @onclick="CreateNewAsync">Create New</button>
@@ -27,7 +28,6 @@
                     <td>@item.Published</td>
                     <td>
                         <button type="button" @onclick="() => EditAsync(item.Id)">Edit</button>
-                        <button type="button">Delete</button>
                     </td>
                 </tr>
             }
