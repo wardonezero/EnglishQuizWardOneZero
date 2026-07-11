@@ -1,0 +1,12 @@
+﻿<div>
+    <div class="info"> @Section </div>
+    <div class="actions">
+        <button type="button" class="button-save-exit">Save & Exit</button>
+        <button type="button" class="button-back" @onclick="OnBackClicked">Back</button>
+        <button type="button" class="button-next" @onclick="OnNextClicked">Next)</button>
+    </div>
+</div>
+<div>
+    <div>@(showTimer ? TimerDisplay : "--:--")</div>
+    <div>Question @DisplayQuestion of @QuestionCount</div>
+</div>
